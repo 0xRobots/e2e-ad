@@ -1,4 +1,4 @@
-# e2e-ad
+# e2e_ad
 Vision Language Action Model for End-to-End Autonomous Driving
 
 # Install Ollama

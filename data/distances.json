@@ -1,0 +1,62 @@
+{
+  "wall_corner": {
+    "min_height_ratio": 0.06,
+    "max_height_ratio": 1.0,
+    "min_width_ratio": 0.03,
+    "max_width_ratio": 0.6,
+    "min_aspect_ratio": 0.2,
+    "max_aspect_ratio": 1.0,
+    "estimated_min_distance": 0.1,
+    "estimated_max_distance": 2.2
+  },
+  "wall_top": {
+    "min_height_ratio": 0.1,
+    "max_height_ratio": 1.0,
+    "min_width_ratio": 0.01,
+    "max_width_ratio": 0.75,
+    "min_aspect_ratio": 0.2,
+    "max_aspect_ratio": 1.0,
+    "estimated_min_distance": 0.1,
+    "estimated_max_distance": 2.2
+  },
+  "wall_right": {
+    "min_height_ratio": 0.1,
+    "max_height_ratio": 1.0,
+    "min_width_ratio": 0.01,
+    "max_width_ratio": 0.75,
+    "min_aspect_ratio": 0.2,
+    "max_aspect_ratio": 1.0,
+    "estimated_min_distance": 0.1,
+    "estimated_max_distance": 2.2
+  },
+  "wall_bottom": {
+    "min_height_ratio": 0.1,
+    "max_height_ratio": 1.0,
+    "min_width_ratio": 0.01,
+    "max_width_ratio": 0.75,
+    "min_aspect_ratio": 0.2,
+    "max_aspect_ratio": 1.0,
+    "estimated_min_distance": 0.1,
+    "estimated_max_distance": 2.2
+  },
+  "wall_left": {
+    "min_height_ratio": 0.1,
+    "max_height_ratio": 1.0,
+    "min_width_ratio": 0.01,
+    "max_width_ratio": 0.75,
+    "min_aspect_ratio": 0.2,
+    "max_aspect_ratio": 1.0,
+    "estimated_min_distance": 0.1,
+    "estimated_max_distance": 2.2
+  },
+  "robot": {
+    "min_height_ratio": 0.2,
+    "max_height_ratio": 0.7,
+    "min_width_ratio": 0.1,
+    "max_width_ratio": 1.0,
+    "min_aspect_ratio": 0.8,
+    "max_aspect_ratio": 2.2,
+    "estimated_min_distance": 0.05,
+    "estimated_max_distance": 2.0
+  }
+}

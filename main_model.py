@@ -4,7 +4,7 @@ import sys
 import argparse
 
 # The only commands a robot may output
-VALID_COMMANDS = {'move forward', 'turn left', 'turn right', 'stop'}
+VALID_COMMANDS = {'forward', 'left', 'right', 'stop'}
 
 
 def build_prompt() -> str:
@@ -18,7 +18,7 @@ def build_prompt() -> str:
         "DO NOT collide with any objects.\n"
         "Stay away from walls.\n"
         "Strictly only output one of the following commands:\n"
-        "'move forward', 'turn left', 'turn right', 'stop'"
+        "{forward}, {left}, {right}, {stop}"
     )
 
 
@@ -72,7 +72,7 @@ def main() -> None:
     parser.add_argument(
         "-m",
         "--model",
-        default="qwen2.5vl:3b",
+        default="moondream",
         help="Ollama model name to use (default: %(default)s)",
     )
     args = parser.parse_args()

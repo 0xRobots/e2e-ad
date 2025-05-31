@@ -16,7 +16,7 @@ def main():
     'move forward', 'turn left', 'turn right', 'stop'
     """
     
-    image_path = "/Users/matin/robots/e2e-ad/image1.jpg"
+    image_path = "./image1.jpg"
 
     if not os.path.exists(image_path):
         print(f"Error: Image file not found at {image_path}")
