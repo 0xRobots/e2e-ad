@@ -1,5 +1,6 @@
 import ollama
 import os
+import base64  # NEW
 
 def main():
     """
@@ -27,13 +28,17 @@ def main():
         print(f"Using model: {model_name}")
         print(f"Loading image from: {image_path}")
         
+        # NEW: read and encode image
+        with open(image_path, "rb") as img_file:
+            encoded_image = base64.b64encode(img_file.read()).decode("utf-8")
+
         response = ollama.chat(
             model=model_name,
             messages=[
                 {
                     'role': 'user',
                     'content': prompt_text,
-                    'images': [image_path]  # Pass the image path here
+                    'images': [encoded_image]  # now passing base64 string
                 },
             ]
         )
