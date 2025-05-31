@@ -1,0 +1,12 @@
+type: dev-environment
+name: vscode
+
+# If `image` is not specified, dstack uses its default image
+python: "3.11"
+#image: dstackai/base:py3.13-0.7-cuda-12.1
+
+ide: vscode
+
+# Uncomment to request resources
+resources:
+ gpu: 24GB

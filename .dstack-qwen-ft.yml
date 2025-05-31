@@ -1,0 +1,11 @@
+type: dev-environment
+# The name is optional, if not specified, generated randomly
+name: vscode    
+
+# Any custom Docker image
+image: john119/vlm
+
+ide: vscode
+
+# resources:
+#  gpu: 24GB
