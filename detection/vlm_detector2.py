@@ -3,7 +3,6 @@ import numpy as np
 from PIL import Image
 import tempfile
 import ollama
-from e2e_ad.data.sensor_data import SensorData
 
 
 class VlmDetector2:
@@ -48,25 +47,25 @@ class VlmDetector2:
             )
         return response["message"]["content"]
 
-    def process(self, sensor_data: SensorData) -> SensorData:
+    def process(self, frame):
         """
         Process frames using Ollama and update sensor data with navigation direction.
         Uses the left frame for decision making.
         """
-        if sensor_data.left_frame is None:
-            return sensor_data
+        if frame is None:
+            return "stop"
 
         try:
-            pil_image = self._frame_to_pil(sensor_data.left_frame)
+            pil_image = self._frame_to_pil(frame)
             response = self._query_ollama(pil_image)
-            command = self._validate_command(response)
+            action = self._validate_command(response)
             print(f"[DEBUG] VLM Response: {response}", flush=True)
-            sensor_data.vlm_direction = command
+            return action
         except Exception as e:
             print(f"Error in VLM processing: {e}", flush=True)
-            sensor_data.vlm_direction = "stop"
+            action = "stop"
 
-        return sensor_data
+        return action
 
     def cleanup(self):
         """Clean up resources (no-op for Ollama)."""

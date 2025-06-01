@@ -13,8 +13,12 @@ class VlmBehaviorStrategy(NavigationStrategy):
         Make navigation decisions based on VLM direction from sensor data.
         Returns (left_speed, right_speed) tuple.
         """
+
         if sensor_data.vlm_direction is None:
             return self.stop_speed, self.stop_speed
+
+        direction = sensor_data.vlm_direction
+        print(f"[DEBUG] vlm_direction: {direction}", flush=True)
 
         # Map VLM direction to motor speeds
         if sensor_data.vlm_direction == 'forward':

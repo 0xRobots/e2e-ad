@@ -5,10 +5,15 @@ class VmlDetectionProcessor(ProcessingModule):
     def __init__(self, detector):
         self.detector = detector
         if not self.detector:
-            print("[Warning] Detector module not available.")
+            print("[Warning] Detector module not available.", flush=True)
 
     def process(self, sensor_data: SensorData):
         if not self.detector:
             return sensor_data
-        sensor_data.vlm_direction = self.detector.process(sensor_data)
+        
+        direction = self.detector.process(sensor_data.left_frame)
+
+        print(f"[DEBUG] direction: {direction}", flush=True)
+
+        sensor_data.vlm_direction = direction
         return sensor_data
