@@ -10,14 +10,14 @@ from e2e_ad.camera.frame_cropper_pytorch import FrameCropper
 from e2e_ad.data.metrics_loader import MetricsLoader
 from e2e_ad.data.sensor_data_hub import SensorDataHub
 from e2e_ad.detection.distance_estimator import DistanceEstimator
-from e2e_ad.detection.yolo_detector import YoloDetector
+#from e2e_ad.detection.yolo_detector import YoloDetector
+from e2e_ad.detection.vlm_detector2 import VlmDetector2
 from e2e_ad.visualizing.frame_visualizer import FrameVisualizer
 from e2e_ad.processing.processing_pipeline_manager import ProcessingPipelineManager
-from e2e_ad.processing.detection_processor import DetectionProcessor
+from e2e_ad.processing.vlm_detection_processor import VmlDetectionProcessor
 from e2e_ad.processing.distance_estimation_processor import DistanceEstimationProcessor
 from e2e_ad.processing.tracking_processor import TrackingProcessor
 from e2e_ad.processing.visualizing_processor import VisualizingProcessor
-from e2e_ad.processing.vlm_processor import VlmProcessor
 from e2e_ad.network.websocket_client import WebSocketClient
 from e2e_ad.navigation.autonomous_navigator import AutonomousNavigator
 from e2e_ad.navigation.vlm_behavior_strategy import VlmBehaviorStrategy
@@ -45,7 +45,7 @@ def frame_processing_loop(capture, processing_pipeline_manager: ProcessingPipeli
 
 def main():
     # Parse command-line arguments or set default values.
-    robot_ip = sys.argv[1] if len(sys.argv) > 1 else "192.168.194.84"
+    robot_ip = sys.argv[1] if len(sys.argv) > 1 else "192.168.43.199"
     stream_port = int(sys.argv[2]) if len(sys.argv) > 2 else 8554
     ws_port = int(sys.argv[3]) if len(sys.argv) > 3 else 8000
 
@@ -56,8 +56,8 @@ def main():
     metrics = metrics_loader.load_metrics()
 
     # Initialize object detection model
-    detector = YoloDetector(MODEL_PATH)
-    distance_estimator = DistanceEstimator(metrics)
+    #detector = YoloDetector(MODEL_PATH)
+    #distance_estimator = DistanceEstimator(metrics)
 
     # Initialize camera capture
     stream1_url = f"rtsp://{robot_ip}:{stream_port}/cam0"
@@ -75,13 +75,13 @@ def main():
     sensor_data_hub = SensorDataHub()
 
     # Initialize VLM processor
-    vlm_processor = VlmProcessor()
+    vlm_detector = VlmDetector2()
 
     # Initialize Processing Pipeline Manager
     processing_pipeline_manager = ProcessingPipelineManager(sensor_data_hub)
-    processing_pipeline_manager.register_module(DetectionProcessor(detector))
-    processing_pipeline_manager.register_module(DistanceEstimationProcessor(distance_estimator))
-    processing_pipeline_manager.register_module(VlmProcessor(vlm_processor))
+    processing_pipeline_manager.register_module(VmlDetectionProcessor(vlm_detector))
+    #processing_pipeline_manager.register_module(DistanceEstimationProcessor(distance_estimator))
+    #processing_pipeline_manager.register_module(VlmProcessor(vlm_processor))
     processing_pipeline_manager.register_module(VisualizingProcessor(visualizer))
 
     # Start frame processing in a separate thread
@@ -143,7 +143,7 @@ def main():
             processing_thread.join(timeout=2.0)
         # Clean up resources
         cropper.cleanup()
-        vlm_processor.cleanup()
+        vlm_detector.cleanup()
 
         ws_client.send_command(0, 0)
         # If the navigator was started, stop it.

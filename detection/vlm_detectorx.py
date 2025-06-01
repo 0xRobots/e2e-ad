@@ -2,10 +2,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import cv2
 import numpy as np
 from PIL import Image
-from e2e_ad.processing.processing_module import ProcessingModule
 from e2e_ad.data.sensor_data import SensorData
 
-class VlmProcessor(ProcessingModule):
+class VlmDetector2:
     def __init__(self, model_name="moondream/moondream-2b-2025-04-14-4bit"):
         """
         Initialize the VLM processor with Moondream model.
@@ -24,7 +23,7 @@ class VlmProcessor(ProcessingModule):
         DO NOT collide with any objects.
         Stay away from walls.
         Strictly only output one of the following commands:
-        'forward', 'left', 'right', 'stop'
+        {forward}, {left}, {right}, {stop}
         """
         
         # Valid commands that the model can output
