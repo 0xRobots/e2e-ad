@@ -12,4 +12,4 @@ class SensorData:
     right_detections: List[dict] = field(default_factory=list)
     left_tracking: List[Any] = field(default_factory=list)
     right_tracking: List[Any] = field(default_factory=list)
-    vlm_direction: str = None
+    vlm_direction: str = None  # Stores the VLM's navigation decision: 'forward', 'left', 'right', or 'stop' 

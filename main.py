@@ -17,12 +17,13 @@ from e2e_ad.processing.detection_processor import DetectionProcessor
 from e2e_ad.processing.distance_estimation_processor import DistanceEstimationProcessor
 from e2e_ad.processing.tracking_processor import TrackingProcessor
 from e2e_ad.processing.visualizing_processor import VisualizingProcessor
+from e2e_ad.processing.vlm_processor import VlmProcessor
 from e2e_ad.network.websocket_client import WebSocketClient
 from e2e_ad.navigation.autonomous_navigator import AutonomousNavigator
-from e2e_ad.navigation.reactive_behavior_strategy import ReactiveBehaviorStrategy
+from e2e_ad.navigation.vlm_behavior_strategy import VlmBehaviorStrategy
 from e2e_ad.rendering.dual_camera_renderer import DualCameraRenderer
 from e2e_ad.rendering.sensor_data_renderer import SensorDataRenderer
-from e2e_ad.tracking.deepsort_tracker import DeepSortTracker
+#from e2e_ad.tracking.deepsort_tracker import DeepSortTracker
 
 def frame_processing_loop(capture, processing_pipeline_manager: ProcessingPipelineManager, frame_cropper, stop_event):
     """Continuously process frames and update the SensorDataHub."""
@@ -67,20 +68,20 @@ def main():
     # Initialize frame cropper
     cropper = FrameCropper(CROP_PATH)
 
-    # Initialize tracker (can be None if disabled)
-    tracker = DeepSortTracker()
-
     # Initialize frame visualizer
     visualizer = FrameVisualizer()
 
     # Create a shared sensor data hub
     sensor_data_hub = SensorDataHub()
 
+    # Initialize VLM processor
+    vlm_processor = VlmProcessor()
+
     # Initialize Processing Pipeline Manager
     processing_pipeline_manager = ProcessingPipelineManager(sensor_data_hub)
     processing_pipeline_manager.register_module(DetectionProcessor(detector))
     processing_pipeline_manager.register_module(DistanceEstimationProcessor(distance_estimator))
-    # processing_pipeline_manager.register_module(TrackingProcessor(tracker))
+    processing_pipeline_manager.register_module(VlmProcessor(vlm_processor))
     processing_pipeline_manager.register_module(VisualizingProcessor(visualizer))
 
     # Start frame processing in a separate thread
@@ -100,8 +101,8 @@ def main():
     ws_url = f"ws://{robot_ip}:{ws_port}/ws"
     ws_client = WebSocketClient(ws_url)
 
-    # Instantiate navigation strategy
-    strategy = ReactiveBehaviorStrategy()
+    # Instantiate VLM navigation strategy
+    strategy = VlmBehaviorStrategy()
 
     # Initialize Autonomous Navigator
     navigator = AutonomousNavigator(sensor_data_hub, ws_client, strategy, decision_interval=0.5)
@@ -128,10 +129,8 @@ def main():
 
             sensor_data = sensor_data_hub.get_latest()
             if sensor_data is not None:
-                #print("[DEBUG] rendering !")
                 renderer.show(sensor_data)
             else:
-                #print("[DEBUG] no sensor data available !")
                 dual_camera_renderer.show(capture.frames)
 
     except KeyboardInterrupt:
@@ -142,8 +141,9 @@ def main():
         # Wait for the processing thread to finish
         if processing_thread.is_alive():
             processing_thread.join(timeout=2.0)
-        # Clean up GPU resources
+        # Clean up resources
         cropper.cleanup()
+        vlm_processor.cleanup()
 
         ws_client.send_command(0, 0)
         # If the navigator was started, stop it.
